@@ -1,16 +1,14 @@
 class Books
-  attr_accessor :title, :author
-  attr_reader :rentals
+  attr_accessor :title, :author, :rental_data
 
   # setters and getters for instance variables
   def initialize(title, author)
     @title = title
     @author = author
-    @rentals = []
+    @rental_data = []
   end
 
-  def add_rental(rental)
-    @rentals.push(rental)
-    rental.book = self
+  def add_rental_date(date, person)
+    Rental.new(date, self, person)
   end
 end
