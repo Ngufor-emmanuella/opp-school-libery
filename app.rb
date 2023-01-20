@@ -3,6 +3,11 @@ require_relative './students'
 require_relative './books'
 require_relative './person'
 require_relative './teacher'
+require_relative './createstudents'
+require_relative './createteachers'
+require_relative './main'
+require_relative './listrents'
+require_relative './rent_much_book'
 
 class App
   attr_accessor :books, :rentals, :persons
@@ -13,7 +18,7 @@ class App
     @rentals = []
   end
 
-    # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/CyclomaticComplexity
   def select_list
     option = gets.chomp
 
@@ -48,7 +53,7 @@ class App
     select_list
   end
 
-  def book_list
+  def list_all_books
     if @books.empty?
       puts 'No books found.'
       puts ''
@@ -64,7 +69,7 @@ class App
     end
   end
 
-  def list_of_people
+  def list_all_people
     if @persons.empty?
       puts 'No people found'
       puts ''
@@ -80,7 +85,7 @@ class App
     end
   end
 
-  def create_book
+  def create_a_book
     print 'Title: '
     title = gets.chomp
 
@@ -108,12 +113,12 @@ class App
     libary_section
   end
 
-  def create_rental
+  def create_a_rental
     rent_book
   end
 
-  def list_of_rentals
-    list_person_who_rented
+  def list_rentals
+    list_person_rentals
   end
 
   def end_application
@@ -124,4 +129,3 @@ class App
   start_app = Main.new
   start_app.main
 end
-      

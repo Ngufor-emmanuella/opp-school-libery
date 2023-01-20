@@ -6,7 +6,7 @@ require_relative './teacher'
 require_relative './books'
 require_relative './rental'
 
-def renting_book
+def rent_book
   if @books.empty?
     puts 'No books avaliable.'
     puts 'Enter 4 to create a new book'

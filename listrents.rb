@@ -1,12 +1,12 @@
 require_relative './app'
 require_relative './person'
-require_relative'./students'
+require_relative './students'
 require_relative './teacher'
-require_relative'./nameable'
+require_relative './nameable'
 require_relative './books'
 require_relative './rental'
 
-def person_rentals_list
+def list_person_rentals
   if @persons.empty?
     puts 'No person found'
     puts 'Enter 3 to add a person. later, create rentals for them'

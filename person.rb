@@ -4,6 +4,7 @@ require './capitalised_decorator'
 
 class Person < Nameable
   attr_accessor :name, :rentals, :age
+  attr_reader :id
 
   def initialize(age, id, name = 'Unknown', parent_permission: true)
     super
@@ -20,7 +21,7 @@ class Person < Nameable
     age >= 18
   end
 
-  public 
+  public
 
   def can_use_services?
     true if of_age? || @parent_permission

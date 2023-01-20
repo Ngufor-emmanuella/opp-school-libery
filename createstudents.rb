@@ -3,7 +3,7 @@ require_relative './nameable'
 require_relative './students'
 
 
-def create_student
+def create_a_student
   print 'Age: '
   age = gets.chomp
 
@@ -17,10 +17,11 @@ def create_student
   when 'y', 'Y'
     @persons.push(Student.new(true, age, name))
     puts 'Sucess student created'
+  when 'n', 'N'
+    @persons.push(Student.new(false, age, name))
+    puts 'Success student created'
   else
     puts 'Not permitted (Enter Y/N)'
     libary_section
   end
 end
-
-

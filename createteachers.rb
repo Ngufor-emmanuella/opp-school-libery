@@ -2,7 +2,7 @@ require_relative './teacher'
 require_relative './person'
 require_relative './nameable'
 
-def create_teacher
+def create_a_teacher
   print 'Age: '
   age = gets.chomp
 

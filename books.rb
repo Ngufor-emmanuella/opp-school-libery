@@ -1,4 +1,4 @@
-class Books
+class Book
   attr_accessor :title, :author, :rentals
 
   # setters and getters for instance variables
@@ -8,7 +8,7 @@ class Books
     @rentals = []
   end
 
-  def add_rental_data(rental)
+  def add_rental(rental)
     @rentals << rental
   end
 end
