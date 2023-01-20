@@ -33,6 +33,7 @@ def add_people(people)
   name = gets.chomp
 
   case person_to_add
+    
   when 1
     print 'Specialization?'
     specialization = gets.chomp

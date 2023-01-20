@@ -3,7 +3,6 @@ def main
   books = []
   rental_data = []
   people = []
-  
   options(books, people, rental_data)
 end
 
@@ -25,7 +24,7 @@ def options(books, people, rental_data)
     option = gets.chomp.to_i
     case option
     when 1
-    show_books(books)
+      show_books(books)
     when 2
       show_people(people)
     when 3
