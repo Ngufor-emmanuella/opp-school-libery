@@ -37,4 +37,3 @@ def rent_book
     library_section
   end
 end
-# rubocop:enable ClassLength
