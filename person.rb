@@ -3,11 +3,11 @@ require_relative './timer_decorator'
 require './capitalised_decorator'
 
 class Person < Nameable
-  attr_accessor :name, :age, :id
+  attr_accessor :name, :age, :id, :rental_data
 
   def initialize(age, id, name = 'Unknown', parent_permission: true)
     super
-    @id = id
+    @id = Random.rand(1..1000)
     @name = name
     @age = age
     @rental_data = []
