@@ -34,7 +34,7 @@ def add_people(people)
 
   case person_to_add
 
-  if 1
+  when 1
     print 'Specialization?'
     specialization = gets.chomp
     people.push(Teacher.new(specialization, age, name))
@@ -42,7 +42,7 @@ def add_people(people)
   puts 'Added person succesfully'
 end
 
-  if 2
+  when 2
     print 'Do you have parent permission? [Y/N]:'
     user_reply = gets.chomp.capitalize
     permission_user = true if user_reply === 'Y'
