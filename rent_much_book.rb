@@ -6,6 +6,7 @@ require_relative './teacher'
 require_relative './books'
 require_relative './rental'
 
+# rubocop:disable ClassLength
 def rent_book
   if @books.empty?
     puts 'No books avaliable.'
@@ -37,3 +38,4 @@ def rent_book
     library_section
   end
 end
+# rubocop:enable ClassLength
