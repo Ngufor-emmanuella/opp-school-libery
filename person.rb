@@ -1,9 +1,9 @@
-require_relative 'nameable'
+require_relative './nameable'
 require_relative './timer_decorator'
 require './capitalised_decorator'
 
 class Person < Nameable
-  attr_accessor :name, :age, :id, :rental_data
+  attr_accessor :name, :rentals, :age
 
   def initialize(age, id, name = 'Unknown', parent_permission: true)
     super
@@ -14,9 +14,13 @@ class Person < Nameable
     @parent_permission = parent_permission
   end
 
+  private
+
   def of_age?
     age >= 18
   end
+
+  public 
 
   def can_use_services?
     true if of_age? || @parent_permission
@@ -26,8 +30,7 @@ class Person < Nameable
     @name
   end
 
-  def add_rental_data(date, book)
-    Rental.new(date, self, book)
-    rental_data.push(self)
+  def add_rental(rental)
+    @rentals << rental
   end
 end

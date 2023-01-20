@@ -4,87 +4,124 @@ require_relative './books'
 require_relative './person'
 require_relative './teacher'
 
-def show_books(books)
-  if books.empty?
-    puts 'No books found in the libary'
-  else
-    books.each do [book]
-      puts "title: #{book.title}, Author: #{book.author}"
+class App
+  attr_accessor :books, :rentals, :persons
+
+  def initialize
+    @persons = []
+    @books = []
+    @rentals = []
+  end
+
+    # rubocop:disable Metrics/CyclomaticComplexity
+  def select_list
+    option = gets.chomp
+
+    case option
+    when '1' then list_all_books
+    when '2' then list_all_people
+    when '3' then create_a_person
+    when '4' then create_a_book
+    when '5' then create_a_rental
+    when '6' then list_rentals
+    when '7' then stop_application
+    else
+      puts 'Option not found. please select between 1 and 7'
+      select_list
     end
   end
-end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
-def show_people(people)
-  if people.empty?
-    puts 'No person found'
-  else
-    people.each do |person|
-      puts "Name: #{person.name}, Age: #{person.age}, ID: #{person.id}"
-    end
+  def libary_section
+    puts ''
+    puts 'Welcome to the libary'
+    puts ''
+    puts 'Please chose an option from the list of numbers:'
+    puts '1 - List all books'
+    puts '2 - List all people'
+    puts '3 - Create a person'
+    puts '4 - Create a book'
+    puts '5 - Create a rental'
+    puts '6 - List all rentals for a person with id'
+    puts '7 - Exit'
+    puts ''
+    select_list
   end
-end
 
-def add_people(people)
-  print('press 1 to add a teacher or press 2 to add a student')
-  person_to_add = gets.chomp.to_i
-  print 'Age? '
-  age = gets.chomp.to_i
-  print 'Name? '
-  name = gets.chomp
-
-  case person_to_add
-
-  when 1
-    print 'Specialization?'
-    specialization = gets.chomp
-    people.push(Teacher.new(specialization, age, name))
-  end
-  puts 'Added person succesfully'
-end
-
-  when 2
-    print 'Do you have parent permission? [Y/N]:'
-    user_reply = gets.chomp.capitalize
-    permission_user = true if user_reply === 'Y'
-    permission_user = false if user_reply === 'N'
-    people.push(Student.new(nil, age, name, parent_permission: user_permission))
-
-    def add_books(books)
-      puts 'Please add a book'
-      print 'Title :'
-      title = gets.chomp.capitalize
-      print 'Author:'
-      author = gets.chomp.capitalize
-      bools.push(Book.new(title, author))
-      puts 'Added book succesfully'
-    end
-
-    def add_rental(books, people, rental_data)
-      puts 'Please choose a book from the list through a number'
-      books.map.with_index {|book, index| puts "#{index} Title: #{book.title}',Author:#{book.author}" }
-      choosen_book = gets.chomp.to_i
-      puts "Choose a person from the list:(
-        DON'T CHOOSE ID PLEASE)"
-        people.map.with_index do |person, index|
-          puts "#{index}, Name: #{person.name} Age: #{person.age}, ID: #{person.id}"
-        end
-        choosen_person = gets.chomp.to_i
-
-        print 'date?'
-        choosen_date = gets.chomp
-        rental_data.push(Rental.new(choosen_date, people[choosen_person], books[choosen_book]))
-        puts 'rental_data updated'
+  def book_list
+    if @books.empty?
+      puts 'No books found.'
+      puts ''
+      puts 'Enter 4 to create a new book'
+      select_list
+    else
+      puts 'List of books in stock:'
+      puts ''
+      @books.each do |book|
+        puts "Title: #{book.title}, Author: #{book.author}"
       end
+      libary_section
+    end
+  end
 
-      def show_rental_data(rentals)
-        print 'Person ID'
-        choosen_person_id = gets.chomp.to_i
-        rentals.each do |rental|
-          next unless rental.person.id == choosen_person_id
-
-          puts rental.book.title
-          puts rental.person.name
-          puts rental.date
-        end
+  def list_of_people
+    if @persons.empty?
+      puts 'No people found'
+      puts ''
+      puts 'Enter 3 to create a new person'
+      select_list
+    else
+      puts 'Found list of people:'
+      puts ''
+      @persons.each do |person|
+        puts "#{[person.class]} Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
       end
+      libary_section
+    end
+  end
+
+  def create_book
+    print 'Title: '
+    title = gets.chomp
+
+    print 'Author: '
+    author = gets.chomp
+
+    @books.push(Book.new(title, author))
+    puts 'success book created!'
+    libary_section
+  end
+
+  def create_a_person
+    print 'Do you want to create a student (1) or a teacher (2)? [Input the number]: '
+    person_no = gets.chomp
+
+    case person_no
+    when '1'
+      create_student
+    when '2'
+      create_a_teacher
+    else
+      puts 'Invalid options'
+      puts ''
+    end
+    libary_section
+  end
+
+  def create_rental
+    rent_book
+  end
+
+  def list_of_rentals
+    list_person_who_rented
+  end
+
+  def end_application
+    puts 'Nice having you hope to see you soon'
+    exit
+  end
+
+  start_app = Main.new
+  start_app.main
+end
       
