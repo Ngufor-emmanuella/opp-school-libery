@@ -105,7 +105,7 @@ class App
     when '1'
       create_a_student
     when '2'
-       create_a_teacher
+      create_a_teacher
     else
       puts 'Invalid options'
       puts ''
