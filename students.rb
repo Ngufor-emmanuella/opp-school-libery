@@ -7,6 +7,7 @@ class Student < Person
     super(age, name)
     @classroom = classroom
     @parent_permission = parent_permission
+    @name = name
   end
 
   def classroom=(classroom)

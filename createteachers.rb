@@ -12,7 +12,7 @@ def create_a_teacher
   print 'Specialization: '
   specialization = gets.chomp
 
-  @persons.push(Teacher.new(specialization, age, name))
+  @persons.push(Teacher.new(age, specialization, name))
   puts 'success Teacher created!'
   puts ''
 end
