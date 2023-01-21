@@ -1,8 +1,7 @@
 class Classroom
-  attr_reader :students
   attr_accessor :label
-
-  # setters
+  attr_reader :students
+  
   def initialize(label)
     @label = label
     @students = []

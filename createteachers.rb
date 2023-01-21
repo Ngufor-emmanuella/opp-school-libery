@@ -1,10 +1,10 @@
-require_relative './teacher'
-require_relative './person'
-require_relative './nameable'
+require './teacher'
+require './person'
+require './nameable'
 
 def create_a_teacher
   print 'Age: '
-  age = gets.chomp
+  age = gets.chomp.to_i
 
   print 'Name: '
   name = gets.chomp

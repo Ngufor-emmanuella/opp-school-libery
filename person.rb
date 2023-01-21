@@ -7,11 +7,11 @@ class Person < Nameable
   attr_reader :id
 
   def initialize(age, id, name = 'Unknown', parent_permission: true)
-    super
+    super()
     @id = Random.rand(1..1000)
     @name = name
     @age = age
-    @rental_data = []
+    @rentals= []
     @parent_permission = parent_permission
   end
 
@@ -24,7 +24,7 @@ class Person < Nameable
   public
 
   def can_use_services?
-    true if of_age? || @parent_permission
+    of_age? || @parent_permission
   end
 
   def correct_name

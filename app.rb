@@ -7,7 +7,7 @@ require_relative './createstudents'
 require_relative './createteachers'
 require_relative './main'
 require_relative './listrents'
-require_relative './rent_much_book'
+require_relative './rent_books'
 
 class App
   attr_accessor :books, :rentals, :persons
@@ -103,9 +103,9 @@ class App
 
     case person_no
     when '1'
-      create_student
+      create_a_student
     when '2'
-      create_a_teacher
+       create_a_teacher
     else
       puts 'Invalid options'
       puts ''
@@ -121,7 +121,7 @@ class App
     list_person_rentals
   end
 
-  def end_application
+  def stop_application
     puts 'Nice having you hope to see you soon'
     exit
   end
