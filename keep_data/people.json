@@ -1,0 +1,51 @@
+[
+  {
+    "id" : 842,
+    "name" : "Mark",
+    "age" : 53,
+    "specialization" : "design",
+    "class" : "Teacher"
+  },
+  {
+    "id" : 583,
+    "name" : "Dangote",
+    "age" : 56,
+    "specialization" : "geography",
+    "class" : "Teacher"
+  },
+  {
+    "id" : 355,
+    "name" : "Tonto dikeh",
+    "age" : 98,
+    "specialization" : "Farming",
+    "class" : "Teacher"
+  },
+  {
+    "id" : 200,
+    "name" : "arylis",
+    "age" : 23,
+    "parent_permission" : true,
+    "class" : "Student"
+  },
+  {
+    "id" : 730,
+    "name" : "Barbara",
+    "age" : 26,
+    "parent_permission" : true,
+    "class" : "Student"
+  },
+  {
+    "id" : 100,
+    "name" : "Nemal",
+    "age" : 19,
+    "parent_permission" : true,
+    "class" : "Student"
+  },
+  {
+    "id" : 312,
+    "name" : "Kiki",
+    "age" : 78,
+    "specialization" : "History",
+    "class" : "Teacher"
+  }
+]
