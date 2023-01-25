@@ -1,0 +1,16 @@
+[
+  {
+    "date" : "19/02/07",
+    "book" : {
+      "title" : "Life story",
+      "author" : "Beyonce"
+    },
+    "person" : {
+      "id" : 312,
+      "name" : "Kiki",
+      "age" : 78,
+      "specialization" : "History",
+      "class" : "teacher"
+    }
+  }
+]

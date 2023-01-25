@@ -99,11 +99,17 @@ You can run the code from the CLI or use a plugin like [code-runner](https://mar
 
 ## 👥 Authors <a name="authors"></a>
 
-👤 **Odette gleen**
+👤 **Ngufor-emmanuella**
 
 - GitHub: [@Ngufor-emmanuella](https://github.com/Ngufor-emmanuella)
 - Twitter: [@Ngufor-emmanuella](https://twitter.com/Ngufor-emmanuella)
 - LinkedIn: [@Ngufor-emmanuella](https://www.linkedin.com/in/Ngufor-emmanuella)
+
+👤 **Abdul Saboor Sohaib**
+
+- GitHub: [@SaboorSohaib](https://github.com/SaboorSohaib)
+- Twitter: [@SaboorSohaib](https://twitter.com/absaboorsohaib)
+- LinkedIn: [@SaboorSohaib](https://www.linkedin.com/in/abdul-saboor-sohaib/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
