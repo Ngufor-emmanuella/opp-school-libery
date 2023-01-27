@@ -99,7 +99,7 @@ You can run the code from the CLI or use a plugin like [code-runner](https://mar
 
 ## 👥 Authors <a name="authors"></a>
 
-👤 **Odette gleen**
+👤 **Ngufor-emmanuella**
 
 - GitHub: [@Ngufor-emmanuella](https://github.com/Ngufor-emmanuella)
 - Twitter: [@Ngufor-emmanuella](https://twitter.com/Ngufor-emmanuella)
