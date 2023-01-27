@@ -98,6 +98,11 @@ You can run the code from the CLI or use a plugin like [code-runner](https://mar
 <!-- AUTHORS -->
 
 ## 👥 Authors <a name="authors"></a>
+👤 **Abdul Saboor Sohaib**
+
+- GitHub: [@SaboorSohaib](https://github.com/SaboorSohaib)
+- Twitter: [@SaboorSohaib](https://twitter.com/absaboorsohaib)
+- LinkedIn: [@SaboorSohaib](https://www.linkedin.com/in/abdul-saboor-sohaib/)
 
 👤 **Ngufor-emmanuella**
 
