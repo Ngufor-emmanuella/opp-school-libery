@@ -1,131 +1,166 @@
-require_relative './rental'
-require_relative './students'
-require_relative './books'
-require_relative './person'
-require_relative './teacher'
-require_relative './createstudents'
-require_relative './createteachers'
-require_relative './main'
-require_relative './listrents'
-require_relative './rent_books'
+require './person'
+require './students'
+require './teacher'
+require './books'
+require './class_room'
+require './rental'
+require './persist'
 
 class App
-  attr_accessor :books, :rentals, :persons
-
   def initialize
-    @persons = []
+    @persist_people = Persist.new('person.json')
+    @persist_books = Persist.new('book.json')
+    @persist_rentals = Persist.new('rental.json')
     @books = []
+    @persons = []
     @rentals = []
   end
 
-  # rubocop:disable Metrics/CyclomaticComplexity
-  def select_list
-    option = gets.chomp
+  def start_console
+    puts 'Welcome to the Library!'
+    until list_of_options
+      input = gets.chomp
+      if input == '7'
+        puts 'Thank You for using the Library!'
+        break
+      end
 
-    case option
-    when '1' then list_all_books
-    when '2' then list_all_people
-    when '3' then create_a_person
-    when '4' then create_a_book
-    when '5' then create_a_rental
-    when '6' then list_rentals
-    when '7' then stop_application
-    else
-      puts 'Option not found. please select between 1 and 7'
-      select_list
+      option input
     end
-  end
-  # rubocop:enable Metrics/CyclomaticComplexity
-
-  def libary_section
-    puts ''
-    puts 'Welcome to the libary'
-    puts ''
-    puts 'Please chose an option from the list of numbers:'
-    puts '1 - List all books'
-    puts '2 - List all people'
-    puts '3 - Create a person'
-    puts '4 - Create a book'
-    puts '5 - Create a rental'
-    puts '6 - List all rentals for a person with id'
-    puts '7 - Exit'
-    puts ''
-    select_list
   end
 
   def list_all_books
-    if @books.empty?
-      puts 'No books found.'
-      puts ''
-      puts 'Enter 4 to create a new book'
-      select_list
-    else
-      puts 'List of books in stock:'
-      puts ''
-      @books.each do |book|
-        puts "Title: #{book.title}, Author: #{book.author}"
-      end
-      libary_section
+    books_list = @persist_books.load
+    puts 'Database is invalid! Add a book please.' if books_list.empty?
+    books_list.each_with_index { |book, i| puts "[Book #{i}] Title: #{book['title']}, Author: #{book['author']}" }
+  end
+
+  def list_all_persons
+    people_list = @persist_people.load
+    puts 'Database is invalid! Add a person please.' if people_list.empty?
+    people_list.each_with_index do |person, i|
+      puts "[#{i}] Name: #{person['name']}, Age: #{person['age']}, id: #{person['id']}"
     end
   end
 
-  def list_all_people
-    if @persons.empty?
-      puts 'No people found'
-      puts ''
-      puts 'Enter 3 to create a new person'
-      select_list
-    else
-      puts 'Found list of people:'
-      puts ''
-      @persons.each do |person|
-        puts "#{[person.class]} Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
-      end
-      libary_section
-    end
-  end
+  def create_person
+    print 'To create a student, press 1, to create a teacher, press 2 : '
+    option = gets.chomp
 
-  def create_a_book
-    print 'Title: '
-    title = gets.chomp
-
-    print 'Author: '
-    author = gets.chomp
-
-    @books.push(Book.new(title, author))
-    puts 'success book created!'
-    libary_section
-  end
-
-  def create_a_person
-    print 'Do you want to create a student (1) or a teacher (2)? [Input the number]: '
-    person_no = gets.chomp
-
-    case person_no
+    case option
     when '1'
-      create_a_student
+      create_student
     when '2'
-      create_a_teacher
+      create_teacher
     else
-      puts 'Invalid options'
-      puts ''
+      puts 'Invalid input. Try again'
     end
-    libary_section
   end
 
-  def create_a_rental
-    rent_book
+  def create_student
+    puts 'Create a new student'
+    print 'Enter student age: '
+    age = gets.chomp.to_i
+    print 'Enter name: '
+    name = gets.chomp
+    print 'Has parent permission? [Y/N]: '
+    parent_permission = gets.chomp.downcase
+    parent_permission = true if parent_permission == 'y'
+    parent_permission = false if parent_permission == 'n'
+    student = Student.new(age, name, parent_permission)
+    @persons << student
+
+    save = @persist_people.load
+    @persons.each do |person|
+      save << { name: person.name, id: person.id, age: person.age }
+    end
+    save_student = Persist.new('person.json')
+    save_student.save(save)
+
+    puts 'Student created successfully congrats'
   end
 
-  def list_rentals
-    list_person_rentals
+  def create_teacher
+    puts 'Create a new teacher'
+    print 'Enter teacher age: '
+    age = gets.chomp.to_i
+    print 'Enter teacher name: '
+    name = gets.chomp
+    print 'Enter teacher specialization: '
+    specialization = gets.chomp
+    teacher = Teacher.new(specialization, age, name)
+    @persons << teacher
+
+    save = @persist_people.load
+    @persons.each do |person|
+      save << { name: person.name, id: person.id, age: person.age }
+    end
+    save_teacher = Persist.new('person.json')
+    save_teacher.save(save)
+
+    puts 'Teacher created successfully congrats'
   end
 
-  def stop_application
-    puts 'Nice having you hope to see you soon'
-    exit
+  def create_book
+    puts 'Create a new book'
+    print 'Enter title: '
+    title = gets.chomp
+    print 'Enter author: '
+    author = gets
+    book = Book.new(title, author)
+    @books.push(book)
+
+    save = @persist_books.load
+    @books.each do |b|
+      save << { title: b.title, author: b.author }
+    end
+    save_book = Persist.new('book.json')
+    save_book.save(save)
+
+    puts "Book #{title} created successfully congrats."
   end
 
-  start_app = Main.new
-  start_app.main
+  # rubocop:disable Metrics/MethodLength
+  def create_rental
+    puts 'Select which book you want to rent by entering its number'
+    list_all_books
+    book_id = gets.chomp.to_i
+    puts 'Select a person from the list by its number'
+    list_all_persons
+    person_id = gets.chomp.to_i
+    print 'Date: '
+    date = gets.chomp.to_s
+    rental = Rental.new(date, @persist_people.load[person_id], @persist_books.load[book_id])
+    @rentals << rental
+
+    save = @persist_rentals.load
+    @rentals.each do |rent|
+      save << { date: rent.date, book: { title: rent.book['title'], author: rent.book['author'] }, person: {
+        id: rent.person['id'],
+        name: rent.person['name'],
+        age: rent.person['age']
+      } }
+    end
+    save_rental = Persist.new('rental.json')
+    save_rental.save(save)
+    puts 'Rental created successfully congrats'
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  def list_all_rentals
+    rentals_list = @persist_rentals.load
+    puts 'To see person rentals enter the person ID: '
+    list_all_persons
+    id = gets.chomp.to_i
+    puts 'Rented Books:'
+    rentals_list.each do |rental|
+      # rubocop:disable Layout/LineLength
+      if rental['person']['id'] == id
+        puts "Person: #{rental['person']['name']}  Date: #{rental['date']}, Book: '#{rental['book']['title']}' by #{rental['book']['author']}"
+      else
+        puts 'No records where found for the given ID soory please try again'
+      end
+      # rubocop:enable Layout/LineLength
+    end
+  end
 end

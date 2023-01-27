@@ -1,30 +1,15 @@
-require_relative '../rental'
+require_relative './../../rental'
+require_relative './../../teacher'
+require_relative './../../books'
 
-describe Rental do
-  before :each do
-    @rental = Rental.new 'date', 'person', 'book'
-  end
-
-  describe '#new' do
-    it 'returns a new rental object' do
-      @rental.should be_an_instance_of Rental
+describe Book do
+  context 'When testing the Rental' do
+    it 'should create a new Rental class on being initialised' do
+      teacher = Teacher.new('Roland', 35, 'Willy Rovo')
+      book = Book.new('title', 'author')
+      rental = Rental.new('2022-09-09', teacher, book)
+      expect(rental.book.rental.length).to eq 1
+      expect(rental.person.rental.length).to eq 1
     end
   end
-
-  describe '#date' do
-    it 'returns the correct date' do
-      @rental.date.should == 'date'
-    end
-  end
-
-  describe '#person' do
-    it 'returns the correct person' do
-      @rental.person.should == 'person'
-    end
-  end
-
-  describe '#book' do
-    it 'returns the correct book' do
-      @rental.book.should == 'book'
-    end
-  end
+end
