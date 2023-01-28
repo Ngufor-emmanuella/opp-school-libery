@@ -1,164 +1,143 @@
-require './person'
-require './students'
-require './teacher'
-require './books'
-require './class_room'
-require './rental'
-require './persist'
+require_relative 'book'
+require_relative 'student'
+require_relative 'teacher'
+require_relative 'rentals'
+require_relative 'stored'
+require 'json'
 
-class App
-  def initialize
-    @persist_people = Persist.new('person.json')
-    @persist_books = Persist.new('book.json')
-    @persist_rentals = Persist.new('rental.json')
-    @books = []
-    @persons = []
-    @rentals = []
-  end
-
-  def start_console
-    puts 'Welcome to the Library!'
-    until list_of_options
-      input = gets.chomp
-      if input == '7'
-        puts 'Thank You for using the Library!'
-        break
-      end
-
-      option input
-    end
-  end
-
-  def list_all_books
-    books_list = @persist_books.load
-    puts 'Database is invalid! Add a book please.' if books_list.empty?
-    books_list.each_with_index { |book, i| puts "[Book #{i}] Title: #{book['title']}, Author: #{book['author']}" }
-  end
-
-  def list_all_persons
-    people_list = @persist_people.load
-    puts 'Database is invalid! Add a person please.' if people_list.empty?
-    people_list.each_with_index do |person, i|
-      puts "[#{i}] Name: #{person['name']}, Age: #{person['age']}, id: #{person['id']}"
-    end
-  end
-
-  def create_person
-    print 'To create a student, press 1, to create a teacher, press 2 : '
-    option = gets.chomp
-
-    case option
-    when '1'
+module Create
+  def create_a_person
+    puts 'Do you want to create a student (1) or teacher (2)'
+    x = gets.chomp.to_i
+    case x
+    when 1
       create_student
-    when '2'
+    when 2
       create_teacher
-    else
-      puts 'Invalid input. Try again'
     end
   end
 
   def create_student
-    puts 'Create a new student'
-    print 'Enter student age: '
-    age = gets.chomp.to_i
-    print 'Enter name: '
+    puts 'classroom:'
+    clsroom = gets.chomp
+    puts 'Age:'
+    age = gets.chomp
+    puts 'Name:'
     name = gets.chomp
-    print 'Has parent permission? [Y/N]: '
-    parent_permission = gets.chomp.downcase
-    parent_permission = true if parent_permission == 'y'
-    parent_permission = false if parent_permission == 'n'
-    student = Student.new(age, name, parent_permission)
-    @persons << student
-
-    save = @persist_people.load
-    @persons.each do |person|
-      save << { name: person.name, id: person.id, age: person.age }
-    end
-    save_student = Persist.new('person.json')
-    save_student.save(save)
-
-    puts 'Student created successfully congrats'
+    puts 'permission:'
+    parents_permission = gets.chomp
+    std = Student.new(clsroom, age, name, parents_permission, id: Random.rand(1..1000))
+    @people.push(std)
+    person_string
   end
 
   def create_teacher
-    puts 'Create a new teacher'
-    print 'Enter teacher age: '
-    age = gets.chomp.to_i
-    print 'Enter teacher name: '
+    puts 'specialization:'
+    specilaze = gets.chomp
+    puts 'Age:'
+    age = gets.chomp
+    puts 'Name:'
     name = gets.chomp
-    print 'Enter teacher specialization: '
-    specialization = gets.chomp
-    teacher = Teacher.new(specialization, age, name)
-    @persons << teacher
-
-    save = @persist_people.load
-    @persons.each do |person|
-      save << { name: person.name, id: person.id, age: person.age }
-    end
-    save_teacher = Persist.new('person.json')
-    save_teacher.save(save)
-
-    puts 'Teacher created successfully congrats'
+    teach = Teacher.new(specilaze, age, name, id: Random.rand(1..1000))
+    @people.push(teach)
+    person_string
   end
 
-  def create_book
-    puts 'Create a new book'
-    print 'Enter title: '
-    title = gets.chomp
-    print 'Enter author: '
-    author = gets
-    book = Book.new(title, author)
-    @books.push(book)
-
-    save = @persist_books.load
-    @books.each do |b|
-      save << { title: b.title, author: b.author }
+  def person_string
+    jsonarray = []
+    @people.each do |item|
+      if item.instance_of?(Student)
+        jsonarray.push({ classroom: item.classroom, age: item.age, name: item.name,
+                         parents_permission: item.parents_permission, id: item.id })
+      else
+        jsonarray.push({ age: item.age, name: item.name, id: item.id })
+      end
     end
-    save_book = Persist.new('book.json')
-    save_book.save(save)
-
-    puts "Book #{title} created successfully congrats."
+    json = JSON.generate(jsonarray)
+    File.write('people.json', json)
   end
 
-  def create_rental
-    puts 'Select which book you want to rent by entering its number'
-    list_all_books
-    book_id = gets.chomp.to_i
-    puts 'Select a person from the list by its number'
-    list_all_persons
-    person_id = gets.chomp.to_i
-    print 'Date: '
-    date = gets.chomp.to_s
-    rental = Rental.new(date, @persist_people.load[person_id], @persist_books.load[book_id])
-    @rentals << rental
-
-    save = @persist_rentals.load
-    @rentals.each do |rent|
-      save << { date: rent.date, book: { title: rent.book['title'], author: rent.book['author'] }, person: {
-        id: rent.person['id'],
-        name: rent.person['name'],
-        age: rent.person['age']
-      } }
+  def list_all_people
+    if @people.empty?
+      puts 'There is no people'
+    else
+      puts @people.first.id
+      @people.each { |p| puts "Name:#{p.name} Age:#{p.age} Class:#{p.class} ID:#{p.id}" }
     end
-    save_rental = Persist.new('rental.json')
-    save_rental.save(save)
-    puts 'Rental created successfully congrats'
+  end
+end
+
+module Books
+  def list_all_books
+    if @book.empty?
+      puts 'There is no book'
+    else
+      @book.each { |b| puts "#{b.title} written by #{b.author}" }
+    end
+  end
+
+  def create_a_book
+    puts 'Title:'
+    tit = gets.chomp
+    puts 'Author:'
+    auth = gets.chomp
+    bo = Book.new(tit, auth)
+    @book.push(bo)
+    jsonarray = []
+    @book.each { |item| jsonarray.push({ title: item.title, author: item.author }) }
+    json = JSON.generate(jsonarray)
+    File.write('book.json', json)
+  end
+end
+
+class App
+  def initialize
+    @book = []
+    @people = []
+    @rental = []
+    list_all_stored_books
+    list_all_stored_people
+    list_all_stored_rentals
+  end
+
+  include Create
+  include Books
+
+  def create_a_rental
+    puts 'date(yyyy/dd/mm)'
+    date = gets.chomp
+    puts 'Select a book:'
+    @book.each_with_index { |b, i| puts "#{i}) #{b.title} written by #{b.author}" }
+    bookid = gets.chomp.to_i
+    book = @book[bookid]
+    puts 'Select a person:'
+    @people.each_with_index { |p, i| puts "#{i}) #{p.name}" }
+    personid = gets.chomp.to_i
+    person = @people[personid]
+    rental = Rental.new(date, book, person)
+    @rental.push(rental)
+    store_all_rentals
+  end
+
+  def store_all_rentals
+    jsonarray = []
+    @rental.each do |item|
+      jsonarray.push({ date: item.date,
+                       book: { title: item.book.title, author: item.book.author },
+                       person: { id: item.person.id, name: item.person.name, age: item.person.age } })
+    end
+    File.write('rental.json', JSON.generate(jsonarray))
   end
 
   def list_all_rentals
-    rentals_list = @persist_rentals.load
-    puts 'To see person rentals enter the person ID: '
-    list_all_persons
-    id = gets.chomp.to_i
-    puts 'Rented Books:'
-    rentals_list.each do |rental|
-      # rubocop:disable Layout/LineLength
-      if rental['person']['id'] == id
-        puts "Person: #{rental['person']['name']}  Date: #{rental['date']}, Book: '#{rental['book']['title']}' by #{rental['book']['author']}"
-      else
-        puts 'No records where found for the given ID soory please try again'
+    if @rental.empty?
+      puts 'There are no rentals'
+    else
+      puts 'Please type person id'
+      id = gets.chomp.to_i
+      @rental.each do |r|
+        puts "Date: #{r.date}, Book:#{r.book.title} by #{r.book.author}" if r.person.id == id
       end
-      # rubocop:enable Layout/LineLength
     end
   end
 end

@@ -1,15 +1,24 @@
-require_relative '../rental'
-require_relative '../teacher'
-require_relative '../books'
+require_relative '../rentals'
+require_relative '../book'
+require_relative '../student'
 
-describe Book do
-  context 'When testing the Rental' do
-    it 'should create a new Rental class on being initialised' do
-      teacher = Teacher.new('Roland', 35, 'Willy Rovo')
-      book = Book.new('title', 'author')
-      rental = Rental.new('2022-09-09', teacher, book)
-      expect(rental.book.rental.length).to eq 1
-      expect(rental.person.rental.length).to eq 1
+describe Rental do
+  context 'Testing the Rental class' do
+    book = Book.new('The Evil Forest', 'Ahmed')
+    student = Student.new('Harry Potter', 19, true, 344)
+    date = '2022/12/12'
+    rental = Rental.new(date, book, student)
+
+    it 'should validate the date of the rental' do
+      expect(rental.date).to eq date
+    end
+
+    it 'should validate the person who rented the book' do
+      expect(rental.person).to eq student
+    end
+
+    it 'should validate the book being rented' do
+      expect(rental.book).to eq book
     end
   end
 end

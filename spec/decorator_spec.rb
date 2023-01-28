@@ -1,28 +1,27 @@
-require_relative '../decorator'
 require_relative '../person'
+require_relative '../book'
+require_relative '../rentals'
+require_relative '../capitalize_decorator'
+require_relative '../trimmer_decorator'
 
-describe Decorator do
-  context 'testing the Decorator class' do
-    it 'create a new decorator when Decorator class is initialised' do
-      p = Person.new(34, 'Duane')
-      decorator = Decorator.new(p)
-      expect(decorator.correct_name).to eq 'Duane'
+describe 'testing decorators' do
+  context 'When testing the decorator classes' do
+    it 'should return the name of the person = NAME' do
+      person = Person.new(19, 'maximilianus', true, 444)
+      expect(person.correct_name).to eq 'maximilianus'
     end
-  end
 
-  context 'testing the Decorator class' do
-    it 'create a new decorator when Decorator class is initialised' do
-      p = Person.new(34, 'DuaneStevenson')
-      decorator = TrimmerDecorator.new(p)
-      expect(decorator.correct_name).to eq 'DuaneSteve'
+    it "Should be able to return the person's name capitalized" do
+      person = Person.new(19, 'maximilianus', true, 444)
+      capitalized_person = CapitalizeDecorator.new(person)
+      expect(capitalized_person.correct_name).to eq 'Maximilianus'
     end
-  end
 
-  context 'testing the Decorator class' do
-    it 'create a new decorator when Decorator class is initialised' do
-      p = Person.new(34, 'duane')
-      decorator = CapitalizeDecorator.new(p)
-      expect(decorator.correct_name).to eq 'Duane'
+    it "Should be able to return the person's name capitalized and trimmed to 10 characters" do
+      person = Person.new(19, 'maximilianus', true, 444)
+      capitalized_person = CapitalizeDecorator.new(person)
+      trimmed_person = TrimmerDecorator.new(capitalized_person)
+      expect(trimmed_person.correct_name).to eq 'Maximilian'
     end
   end
 end

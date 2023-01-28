@@ -5,7 +5,7 @@ describe Teacher do
     age = '40'
     name = 'Ali'
     specialization = 'AI'
-    teacher = Teacher.new(age, name, specialization)
+    teacher = Teacher.new(specialization, age, name)
 
     it 'should return the age of the teacher' do
       expect(teacher.age).to eq age
@@ -18,5 +18,9 @@ describe Teacher do
     it 'should return parent permission for teacher' do
       expect(teacher.specialization).to eq specialization
     end
+
+    # it 'should return if a teacher can use services is true' do
+    #   expect(teacher.can_use_services?).to eq true
+    # end
   end
 end

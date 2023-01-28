@@ -1,13 +1,20 @@
 require_relative '../person'
+require_relative '../book'
+require_relative '../rentals'
 
-describe Person do
-  context 'When testing the Person' do
-    it 'create a new book when person class is initialised' do
-      person = Person.new(34, 'Duane David')
-      id = person.id
-      expect(person.age).to eq 34
-      expect(person.name).to eq 'Duane David'
-      expect(person.id).to eq id
+describe 'testing person' do
+  context 'When testing the Person class' do
+    it 'should create a person properly' do
+      person = Person.new(12, 'Abid', true, 444)
+      expect(person.class).to eq Person
+    end
+    it "should return the person's name" do
+      person = Person.new(12, 'Abid', true, 444)
+      expect(person.correct_name).to eq 'Abid'
+    end
+    it 'should return if the person can use services or not = ' do
+      person = Person.new(12, 'Abid', true, 444)
+      expect(person.can_use_service?).to eq true
     end
   end
 end
