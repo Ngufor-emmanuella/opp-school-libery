@@ -1,131 +1,143 @@
-require_relative './rental'
-require_relative './students'
-require_relative './books'
-require_relative './person'
-require_relative './teacher'
-require_relative './createstudents'
-require_relative './createteachers'
-require_relative './main'
-require_relative './listrents'
-require_relative './rent_books'
+require_relative 'book'
+require_relative 'student'
+require_relative 'teacher'
+require_relative 'rentals'
+require_relative 'stored'
+require 'json'
 
-class App
-  attr_accessor :books, :rentals, :persons
-
-  def initialize
-    @persons = []
-    @books = []
-    @rentals = []
-  end
-
-  # rubocop:disable Metrics/CyclomaticComplexity
-  def select_list
-    option = gets.chomp
-
-    case option
-    when '1' then list_all_books
-    when '2' then list_all_people
-    when '3' then create_a_person
-    when '4' then create_a_book
-    when '5' then create_a_rental
-    when '6' then list_rentals
-    when '7' then stop_application
-    else
-      puts 'Option not found. please select between 1 and 7'
-      select_list
+module Create
+  def create_a_person
+    puts 'Do you want to create a student (1) or teacher (2)'
+    x = gets.chomp.to_i
+    case x
+    when 1
+      create_student
+    when 2
+      create_teacher
     end
   end
-  # rubocop:enable Metrics/CyclomaticComplexity
 
-  def libary_section
-    puts ''
-    puts 'Welcome to the libary'
-    puts ''
-    puts 'Please chose an option from the list of numbers:'
-    puts '1 - List all books'
-    puts '2 - List all people'
-    puts '3 - Create a person'
-    puts '4 - Create a book'
-    puts '5 - Create a rental'
-    puts '6 - List all rentals for a person with id'
-    puts '7 - Exit'
-    puts ''
-    select_list
+  def create_student
+    puts 'classroom:'
+    clsroom = gets.chomp
+    puts 'Age:'
+    age = gets.chomp
+    puts 'Name:'
+    name = gets.chomp
+    puts 'permission:'
+    parents_permission = gets.chomp
+    std = Student.new(clsroom, age, name, parents_permission, id: Random.rand(1..1000))
+    @people.push(std)
+    person_string
   end
 
-  def list_all_books
-    if @books.empty?
-      puts 'No books found.'
-      puts ''
-      puts 'Enter 4 to create a new book'
-      select_list
-    else
-      puts 'List of books in stock:'
-      puts ''
-      @books.each do |book|
-        puts "Title: #{book.title}, Author: #{book.author}"
+  def create_teacher
+    puts 'specialization:'
+    specilaze = gets.chomp
+    puts 'Age:'
+    age = gets.chomp
+    puts 'Name:'
+    name = gets.chomp
+    teach = Teacher.new(specilaze, age, name, id: Random.rand(1..1000))
+    @people.push(teach)
+    person_string
+  end
+
+  def person_string
+    jsonarray = []
+    @people.each do |item|
+      if item.instance_of?(Student)
+        jsonarray.push({ classroom: item.classroom, age: item.age, name: item.name,
+                         parents_permission: item.parents_permission, id: item.id })
+      else
+        jsonarray.push({ age: item.age, name: item.name, id: item.id })
       end
-      libary_section
     end
+    json = JSON.generate(jsonarray)
+    File.write('people.json', json)
   end
 
   def list_all_people
-    if @persons.empty?
-      puts 'No people found'
-      puts ''
-      puts 'Enter 3 to create a new person'
-      select_list
+    if @people.empty?
+      puts 'There is no people'
     else
-      puts 'Found list of people:'
-      puts ''
-      @persons.each do |person|
-        puts "#{[person.class]} Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
-      end
-      libary_section
+      puts @people.first.id
+      @people.each { |p| puts "Name:#{p.name} Age:#{p.age} Class:#{p.class} ID:#{p.id}" }
+    end
+  end
+end
+
+module Books
+  def list_all_books
+    if @book.empty?
+      puts 'There is no book'
+    else
+      @book.each { |b| puts "#{b.title} written by #{b.author}" }
     end
   end
 
   def create_a_book
-    print 'Title: '
-    title = gets.chomp
+    puts 'Title:'
+    tit = gets.chomp
+    puts 'Author:'
+    auth = gets.chomp
+    bo = Book.new(tit, auth)
+    @book.push(bo)
+    jsonarray = []
+    @book.each { |item| jsonarray.push({ title: item.title, author: item.author }) }
+    json = JSON.generate(jsonarray)
+    File.write('book.json', json)
+  end
+end
 
-    print 'Author: '
-    author = gets.chomp
-
-    @books.push(Book.new(title, author))
-    puts 'success book created!'
-    libary_section
+class App
+  def initialize
+    @book = []
+    @people = []
+    @rental = []
+    list_all_stored_books
+    list_all_stored_people
+    list_all_stored_rentals
   end
 
-  def create_a_person
-    print 'Do you want to create a student (1) or a teacher (2)? [Input the number]: '
-    person_no = gets.chomp
-
-    case person_no
-    when '1'
-      create_a_student
-    when '2'
-      create_a_teacher
-    else
-      puts 'Invalid options'
-      puts ''
-    end
-    libary_section
-  end
+  include Create
+  include Books
 
   def create_a_rental
-    rent_book
+    puts 'date(yyyy/dd/mm)'
+    date = gets.chomp
+    puts 'Select a book:'
+    @book.each_with_index { |b, i| puts "#{i}) #{b.title} written by #{b.author}" }
+    bookid = gets.chomp.to_i
+    book = @book[bookid]
+    puts 'Select a person:'
+    @people.each_with_index { |p, i| puts "#{i}) #{p.name}" }
+    personid = gets.chomp.to_i
+    person = @people[personid]
+    rental = Rental.new(date, book, person)
+    @rental.push(rental)
+    store_all_rentals
   end
 
-  def list_rentals
-    list_person_rentals
+  def store_all_rentals
+    jsonarray = []
+    @rental.each do |item|
+      jsonarray.push({ date: item.date,
+                       book: { title: item.book.title, author: item.book.author },
+                       person: { id: item.person.id, name: item.person.name, age: item.person.age } })
+    end
+    File.write('rental.json', JSON.generate(jsonarray))
   end
 
-  def stop_application
-    puts 'Nice having you hope to see you soon'
-    exit
+  def list_all_rentals
+    if @rental.empty?
+      puts 'There are no rentals'
+    else
+      puts 'Please type person id'
+      id = gets.chomp.to_i
+      @rental.each do |r|
+        puts "Date: #{r.date}, Book:#{r.book.title} by #{r.book.author}" if r.person.id == id
+      end
+    end
   end
-
-  start_app = Main.new
-  start_app.main
 end
