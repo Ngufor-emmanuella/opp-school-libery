@@ -19,8 +19,8 @@ describe Teacher do
       expect(teacher.specialization).to eq specialization
     end
 
-    # it 'should return if a teacher can use services is true' do
-    #   expect(teacher.can_use_services?).to eq true
-    # end
+    it 'should return if a teacher can use services is true' do
+      expect(teacher.can_use_service?).to eq true
+    end
   end
 end
