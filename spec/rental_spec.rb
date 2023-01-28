@@ -1,6 +1,6 @@
-require_relative './../../rental'
-require_relative './../../teacher'
-require_relative './../../books'
+require_relative '../rental'
+require_relative '../teacher'
+require_relative '../books'
 
 describe Book do
   context 'When testing the Rental' do

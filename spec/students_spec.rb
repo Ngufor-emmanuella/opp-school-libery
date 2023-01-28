@@ -1,4 +1,4 @@
-require_relative './../../students'
+require_relative '../students'
 
 describe Student do
   context 'When testing the Student' do

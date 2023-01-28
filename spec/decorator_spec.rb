@@ -1,5 +1,5 @@
-require_relative './../../decorator'
-require_relative './../../person'
+require_relative '../decorator'
+require_relative '../person'
 
 describe Decorator do
   context 'testing the Decorator class' do

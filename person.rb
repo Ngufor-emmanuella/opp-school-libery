@@ -1,5 +1,4 @@
 require_relative './rental'
-require_relative './timer_decorator'
 
 class Person < Nameable
   attr_reader :id
